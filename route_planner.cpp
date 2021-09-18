@@ -56,8 +56,23 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Remove that node from the open_list.
 // - Return the pointer.
 
+// ** my_sort_function takes two pointer variables of type RouteModel::Node
+// and returns true if the first input (xx) has smaller g+h values than
+// the second input (yy).
+// To be used with the sort function which will then sort
+// the vector of open_list with g+h values from low to high
+// open_list[0] contains the node with lowest sum
+bool my_sort_function(const RouteModel::Node *xx,const RouteModel::Node *yy){
+    return (xx->g_value+xx->h_value) < (yy->g_value+yy->h_value);
+}
+
 RouteModel::Node *RoutePlanner::NextNode() {
 
+    //std::vector<RouteModel::Node*> open_list;
+    std::sort(open_list.begin(),open_list.end(),my_sort_function);
+    RouteModel::Node *next_node = open_list[0]; // creat a pointer to the node with the lowest sum
+
+    return next_node; // return the next node
 }
 
 
