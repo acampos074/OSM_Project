@@ -10,9 +10,10 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
-    //Node &FindClosestNode(float x, float y);
-    auto start_node = &m_Model.FindClosestNode(start_x,start_y);
-    auto end_node = &m_Model.FindClosestNode(end_x,end_y);
+    //Node &FindClosestNode(float x, float y); // this function returns an address
+    start_node = &m_Model.FindClosestNode(start_x,start_y); // initializes the start_node pointer variable
+    end_node = &m_Model.FindClosestNode(end_x,end_y);
+
 }
 
 
@@ -22,8 +23,8 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-
-  return node->distance(*end_node);
+  //float distance(Node other) function returns a float
+  return node->distance(*end_node); // use * operator to dereference the end_node pointer to give access to the value it points at
 }
 
 
@@ -36,13 +37,13 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 
-  current_node.neighbors = current_node->FindNeighbors();
-  for(Node each_node : current_node.neighbors){
-    current_node.parent = ;
-    current_node.h_value = CalculateHValue(*current_node);
-    current_node.g_value = ;
-    open_list.push_back();
-    visited = true;
+  current_node->FindNeighbors();
+  for(auto current_neighbor : current_node->neighbors){
+    current_neighbor->parent = current_node;// initialize the parent pointer with the current node pointer
+    current_neighbor->h_value = CalculateHValue(current_neighbor);
+    current_neighbor->g_value = current_node->g_value + current_node->distance(*current_neighbor);
+    this->open_list.push_back(current_neighbor); // open list is a vector of node pointer variables
+    current_neighbor->visited = true;
   }
 
 }
